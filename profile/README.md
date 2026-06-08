@@ -9,6 +9,7 @@ Multi-platform retail & e-commerce infrastructure.
 | [app-gixa](https://github.com/ghisa-new/app-gixa) | E-commerce integration platform (NEBIM + Shopify + Trendyol) | Next.js, PostgreSQL, Drizzle | https://gixa.verioku.dev |
 | [app-gixa-vms](https://github.com/ghisa-new/app-gixa-vms) | Warehouse terminal app (transfers, put-away, pick, adjust) | Next.js, SQLite, NEBIM Integrator | https://vms.verioku.dev |
 | [app-store](https://github.com/ghisa-new/app-store) | Store reporting dashboard (stats, notifications, operations) | Next.js, SQLite | https://store.verioku.dev |
+| [app-manufacturing](https://github.com/ghisa-new/app-manufacturing) | Production planning (cutting orders, materials, suppliers) | Next.js, SQLite | https://manufacturing.verioku.dev |
 | [app-mobile](https://github.com/ghisa-new/app-mobile) | Customer mobile app (iOS + Android) | React Native, Expo, Shopify Storefront | — |
 | [app-points-api](https://github.com/ghisa-new/app-points-api) | Loyalty points API | Python, FastAPI, NEBIM | — |
 | [app-rfid](https://github.com/ghisa-new/app-rfid) | RFID inventory app for hand terminals | Kotlin, Android, Urovo SDK | — |
@@ -22,8 +23,10 @@ Multi-platform retail & e-commerce infrastructure.
 | Gixa Panel | https://gixa.verioku.dev | 3102 | app-gixa |
 | VMS Warehouse | https://vms.verioku.dev | 3100 | app-gixa-vms |
 | Store Dashboard | https://store.verioku.dev | 3103 | app-store |
+| Manufacturing | https://manufacturing.verioku.dev | 3104 | app-manufacturing |
 | MCP Docs | https://docs.verioku.dev | 3101 | mcp-fleet-docs |
 | Image CDN | https://verioku.com | — | Cloudflare R2 |
+| Previews | https://<user>-<app>.verioku.dev | 5000+ | preview containers |
 
 ## Servers
 
@@ -44,4 +47,14 @@ Multi-platform retail & e-commerce infrastructure.
 
 GitHub Actions on push to `main`. Each repo has `.github/workflows/deploy.yml`.
 
-Required secret: `SSH_PRIVATE_KEY` (Hetzner SSH key).
+Required secrets: `SSH_PRIVATE_KEY` (Hetzner SSH key), `DEPLOY_PAT` (GitHub PAT for preview deploys).
+
+## Preview Deployments
+
+Team members develop through Claude Cowork. Each `dev-*` branch push triggers a preview deployment:
+
+- One branch per user per repo (enforced by GitHub MCP)
+- Preview URL: `https://<username>-<app>.verioku.dev`
+- Safe credentials only (read-only DB, no write APIs)
+- Auto-teardown on branch delete
+- Managed by `/opt/preview/manage.sh` on the server
